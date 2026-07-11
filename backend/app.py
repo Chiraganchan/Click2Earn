@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 import sqlite3
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -35,12 +36,12 @@ def user():
             "currency": "USDT"
         })
 
-    else:
-        return jsonify({
-            "message": "No user found",
-            "balance": 0,
-            "currency": "USDT"
-        })
+    return jsonify({
+        "message": "No user found",
+        "balance": 0,
+        "currency": "USDT"
+    })
+
 
 @app.route("/api/user/<telegram_id>")
 def get_user(telegram_id):
@@ -67,5 +68,10 @@ def get_user(telegram_id):
     return jsonify({
         "message": "User not found"
     })
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000))
+    )
