@@ -14,7 +14,7 @@ async function loadUser() {
     const telegramId = user.id;
 
     const response = await fetch(
-        `https://hasty-dayroom-defrost.ngrok-free.dev/api/user/${telegramId}`
+        `https://click2earn-f6ul.onrender.com/api/user/${telegramId}`
     );
 
     const data = await response.json();
