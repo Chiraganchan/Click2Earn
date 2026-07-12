@@ -119,6 +119,71 @@ def daily_bonus(telegram_id):
         "bonus": 0.01
     })
 
+@app.route("/api/withdraw", methods=["POST"])
+def withdraw():
+
+    from flask import request
+
+    data = request.json
+
+    telegram_id = data["telegram_id"]
+    method = data["method"]
+    address = data["address"]
+    amount = float(data["amount"])
+
+    connection = sqlite3.connect(DATABASE)
+    cursor = connection.cursor()
+
+    # Check balance
+    cursor.execute(
+        "SELECT balance FROM users WHERE telegram_id=?",
+        (telegram_id,)
+    )
+
+    user = cursor.fetchone()
+
+    if not user:
+        connection.close()
+        return jsonify({
+            "success": False,
+            "message": "User not found"
+        })
+
+    if user[0] < amount:
+        connection.close()
+        return jsonify({
+            "success": False,
+            "message": "Insufficient balance"
+        })
+
+
+    # Deduct balance
+    cursor.execute(
+        "UPDATE users SET balance = balance - ? WHERE telegram_id=?",
+        (amount, telegram_id)
+    )
+
+
+    # Save withdrawal request
+    cursor.execute(
+        """
+        INSERT INTO withdrawals
+        (telegram_id, method, address, amount)
+        VALUES (?, ?, ?, ?)
+        """,
+        (telegram_id, method, address, amount)
+    )
+
+
+    connection.commit()
+    connection.close()
+
+
+    return jsonify({
+        "success": True,
+        "message": "Withdrawal request submitted"
+    })
+
 
 if __name__ == "__main__":
     app.run(
