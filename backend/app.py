@@ -216,6 +216,34 @@ def admin_withdrawals():
 
     return jsonify(withdrawals)
 
+@app.route("/api/admin/withdraw/<int:withdraw_id>/<action>", methods=["POST"])
+def update_withdraw(withdraw_id, action):
+
+    connection = sqlite3.connect(DATABASE)
+    cursor = connection.cursor()
+
+    if action == "approve":
+
+        cursor.execute(
+            "UPDATE withdrawals SET status='Approved' WHERE id=?",
+            (withdraw_id,)
+        )
+
+    elif action == "reject":
+
+        cursor.execute(
+            "UPDATE withdrawals SET status='Rejected' WHERE id=?",
+            (withdraw_id,)
+        )
+
+    connection.commit()
+    connection.close()
+
+    return jsonify({
+        "success": True,
+        "status": action
+    })
+
 
 if __name__ == "__main__":
     app.run(
