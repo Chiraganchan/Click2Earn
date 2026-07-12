@@ -3,7 +3,7 @@ from flask_cors import CORS
 import sqlite3
 import os
 
-app = Flask(name)
+app = Flask(__name__)
 CORS(app)
 
 DATABASE = "database/click2earn.db"
@@ -83,7 +83,7 @@ def get_user(telegram_id):
     })
 
 
-if name == "main":
+if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         port=int(os.environ.get("PORT", 5000))
