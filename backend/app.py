@@ -81,6 +81,24 @@ def get_user(telegram_id):
         "balance": 0,
         "currency": "USDT"
     })
+@app.route("/api/reward/<telegram_id>", methods=["POST"])
+def reward(telegram_id):
+
+    connection = sqlite3.connect(DATABASE)
+    cursor = connection.cursor()
+
+    cursor.execute(
+        "UPDATE users SET balance = balance + 0.001 WHERE telegram_id=?",
+        (telegram_id,)
+    )
+
+    connection.commit()
+    connection.close()
+
+    return jsonify({
+        "success": True,
+        "reward": 0.001
+    })
 
 
 if __name__ == "__main__":

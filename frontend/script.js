@@ -21,7 +21,10 @@ async function loadUser() {
 
     document.querySelector(".balance h1").innerText =
         data.balance + " " + data.currency;
-
 }
 
 loadUser();
+
+document.getElementById("watchAdsBtn").onclick = function () {
+    alert("🎉 Ad reward system is coming in the next step!");
+};
