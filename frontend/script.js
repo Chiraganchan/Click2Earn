@@ -25,6 +25,19 @@ async function loadUser() {
 
 loadUser();
 
-document.getElementById("watchAdsBtn").onclick = function () {
-    alert("🎉 Ad reward system is coming in the next step!");
+document.getElementById("watchAdsBtn").onclick = async function () {
+
+    const tg = window.Telegram.WebApp;
+    const telegramId = tg.initDataUnsafe.user.id;
+
+    await fetch(
+        `https://click2earn-f6ul.onrender.com/api/reward/${telegramId}`,
+        {
+            method: "POST"
+        }
+    );
+
+    alert("🎉 +0.001 USDT Reward Added!");
+
+    loadUser();
 };

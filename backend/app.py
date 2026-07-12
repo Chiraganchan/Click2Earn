@@ -100,6 +100,25 @@ def reward(telegram_id):
         "reward": 0.001
     })
 
+@app.route("/api/daily_bonus/<telegram_id>", methods=["POST"])
+def daily_bonus(telegram_id):
+
+    connection = sqlite3.connect(DATABASE)
+    cursor = connection.cursor()
+
+    cursor.execute(
+        "UPDATE users SET balance = balance + 0.01 WHERE telegram_id=?",
+        (telegram_id,)
+    )
+
+    connection.commit()
+    connection.close()
+
+    return jsonify({
+        "success": True,
+        "bonus": 0.01
+    })
+
 
 if __name__ == "__main__":
     app.run(
