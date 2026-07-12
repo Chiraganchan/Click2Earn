@@ -2,7 +2,7 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 import sqlite3
 
-BOT_TOKEN = "8737030958:AAGCPAywVwZhF857epUg302XA2w6CRBbzQo"
+BOT_TOKEN = "8737030958:AAE65Z-NkXZiqfoBPvxBJeAuX1NHJhL8WnY"
 
 DATABASE = "database/click2earn.db"
 
