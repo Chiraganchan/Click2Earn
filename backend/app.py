@@ -88,7 +88,7 @@ def reward(telegram_id):
     cursor = connection.cursor()
 
     cursor.execute(
-        "UPDATE users SET balance = balance + 0.001 WHERE telegram_id=?",
+        "UPDATE users SET balance = balance + 0.10 WHERE telegram_id=?",
         (telegram_id,)
     )
 
@@ -107,7 +107,7 @@ def daily_bonus(telegram_id):
     cursor = connection.cursor()
 
     cursor.execute(
-        "UPDATE users SET balance = balance + 0.01 WHERE telegram_id=?",
+        "UPDATE users SET balance = balance + 5 WHERE telegram_id=?",
         (telegram_id,)
     )
 
@@ -116,7 +116,7 @@ def daily_bonus(telegram_id):
 
     return jsonify({
         "success": True,
-        "bonus": 0.01
+        "bonus": 5.00
     })
 
 @app.route("/api/withdraw", methods=["POST"])
