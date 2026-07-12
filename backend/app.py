@@ -184,6 +184,38 @@ def withdraw():
         "message": "Withdrawal request submitted"
     })
 
+@app.route("/api/admin/withdrawals")
+def admin_withdrawals():
+
+    connection = sqlite3.connect(DATABASE)
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        SELECT id, telegram_id, method, address, amount, status
+        FROM withdrawals
+        ORDER BY id DESC
+        """
+    )
+
+    data = cursor.fetchall()
+
+    connection.close()
+
+    withdrawals = []
+
+    for row in data:
+        withdrawals.append({
+            "id": row[0],
+            "telegram_id": row[1],
+            "method": row[2],
+            "address": row[3],
+            "amount": row[4],
+            "status": row[5]
+        })
+
+    return jsonify(withdrawals)
+
 
 if __name__ == "__main__":
     app.run(
