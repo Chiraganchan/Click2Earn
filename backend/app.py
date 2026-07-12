@@ -3,7 +3,7 @@ from flask_cors import CORS
 import sqlite3
 import os
 
-app = Flask(__name__)
+app = Flask(name)
 CORS(app)
 
 DATABASE = "database/click2earn.db"
@@ -56,21 +56,34 @@ def get_user(telegram_id):
 
     user = cursor.fetchone()
 
-    connection.close()
-
     if user:
+        connection.close()
         return jsonify({
             "username": user[0],
             "balance": user[1],
             "currency": "USDT"
         })
 
+    # Auto create new user
+    cursor.execute(
+        """
+        INSERT INTO users (telegram_id, username, balance)
+        VALUES (?, ?, ?)
+        """,
+        (telegram_id, "New User", 0)
+    )
+
+    connection.commit()
+    connection.close()
+
     return jsonify({
-        "message": "User not found"
+        "username": "New User",
+        "balance": 0,
+        "currency": "USDT"
     })
 
 
-if __name__ == "__main__":
+if name == "main":
     app.run(
         host="0.0.0.0",
         port=int(os.environ.get("PORT", 5000))
